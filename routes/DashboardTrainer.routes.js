@@ -5,10 +5,10 @@ const router = require('express').Router();
 
 const Exercise = require('../models/Exercise.model');
 
-router.post('/addClient', (req, res, next) => {
-  console.log(req.body);
-  User.findByIdAndUpdate(req.body.loggedIn, {
-    $push: { clients: req.body },
+router.post('/user/addClient', (req, res, next) => {
+  console.log('ADD CLIENT', req.body);
+  User.findByIdAndUpdate(req.body.userId, {
+    $push: { clients: req.body.newData },
   }).then((resp) => console.log(resp));
 });
 
@@ -67,6 +67,13 @@ router.get('/exercises', (req, res, next) => {
         res.json(response);
       });
   });
+});
+router.put('/user/deleteclient', (req, res, next) => {
+  const { client, userId } = req.body;
+  console.log('reqbody', req.body);
+  User.findByIdAndUpdate(userId, {
+    $pull: { clients: client },
+  }).then((resp) => res.json(resp));
 });
 
 module.exports = router;
